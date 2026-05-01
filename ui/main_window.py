@@ -57,9 +57,9 @@ def _make_tray_icon() -> QIcon:
 
 
 class MainWindow(QWidget):
-    def __init__(self, tasks: list, settings: AppSettings):
+    def __init__(self, tasks: list, settings: AppSettings, history: list = None):
         super().__init__()
-        self.task_manager = TaskManager(tasks, settings)
+        self.task_manager = TaskManager(tasks, settings, history)
         self.settings = settings
 
         self._drag_origin: QPoint | None = None
@@ -142,6 +142,12 @@ class MainWindow(QWidget):
         self.theme_btn.setToolTip("Toggle theme")
         self.theme_btn.clicked.connect(self._toggle_theme)
 
+        hist_btn = QPushButton("📋")
+        hist_btn.setObjectName("iconBtn")
+        hist_btn.setFixedSize(28, 28)
+        hist_btn.setToolTip("Task history")
+        hist_btn.clicked.connect(self._open_history)
+
         cfg_btn = QPushButton("⚙")
         cfg_btn.setObjectName("iconBtn")
         cfg_btn.setFixedSize(28, 28)
@@ -157,6 +163,7 @@ class MainWindow(QWidget):
         layout.addWidget(lbl)
         layout.addStretch()
         layout.addWidget(self.theme_btn)
+        layout.addWidget(hist_btn)
         layout.addWidget(cfg_btn)
         layout.addWidget(close_btn)
         return bar
@@ -204,6 +211,7 @@ class MainWindow(QWidget):
         widget.toggled.connect(self._on_toggle)
         widget.edit_requested.connect(self._on_edit)
         widget.delete_requested.connect(self._on_delete)
+        widget.late_submit_requested.connect(self._on_late_submit)
         item.setSizeHint(QSize(0, 46))
         self.task_list.setItemWidget(item, widget)
 
@@ -219,6 +227,7 @@ class MainWindow(QWidget):
             widget.toggled.connect(self._on_toggle)
             widget.edit_requested.connect(self._on_edit)
             widget.delete_requested.connect(self._on_delete)
+            widget.late_submit_requested.connect(self._on_late_submit)
             item.setSizeHint(QSize(0, 46))
             self.task_list.setItemWidget(item, widget)
 
@@ -273,6 +282,27 @@ class MainWindow(QWidget):
         ]
         self.task_manager.reorder(new_order)
         self._reattach_widgets()
+
+    @pyqtSlot(str)
+    def _on_late_submit(self, task_id: str):
+        self.task_manager.submit_late(task_id)
+        task = self.task_manager.get(task_id)
+        if not task:
+            return
+        for i in range(self.task_list.count()):
+            item = self.task_list.item(i)
+            if item.data(Qt.ItemDataRole.UserRole) == task_id:
+                w = self.task_list.itemWidget(item)
+                if isinstance(w, TaskItemWidget):
+                    w.refresh(task)
+                break
+
+    def _open_history(self):
+        from ui.history_dialog import HistoryDialog
+        dlg = HistoryDialog(self.task_manager.history, parent=self)
+        dlg.setStyleSheet(self.styleSheet())
+        dlg.late_submitted.connect(self._on_late_submit)
+        dlg.exec()
 
     # ── scheduler callbacks ───────────────────────────────────────────────────
 
