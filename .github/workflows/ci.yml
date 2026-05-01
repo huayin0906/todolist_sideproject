@@ -27,11 +27,7 @@ jobs:
           pip install flake8
 
       - name: Lint with flake8
-        run: |
-          flake8 . ^
-            --max-line-length=120 ^
-            --exclude=build,dist,__pycache__,.git ^
-            --ignore=E501,W503
+        run: flake8 . --max-line-length=120 --exclude=build,dist,__pycache__,.git --ignore=E501,W503
 
       - name: Verify all modules import cleanly
         env:
