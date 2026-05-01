@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"   # triggers on v1.0.0, v1.2.3, etc.
+
+jobs:
+  build-and-release:
+    name: Build exe & publish release
+    runs-on: windows-latest
+
+    permissions:
+      contents: write   # needed to create a GitHub Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build exe
+        run: pyinstaller ToDoList.spec
+
+      - name: Rename exe with version tag
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Rename-Item -Path "dist\ToDoList.exe" -NewName "ToDoList-$tag.exe"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "To-Do List ${{ github.ref_name }}"
+          body: |
+            ## To-Do List ${{ github.ref_name }}
+
+            ### Installation
+            Download **ToDoList-${{ github.ref_name }}.exe** below and double-click to run.
+            No Python installation required.
+
+            > Windows SmartScreen may show a warning on first launch — click **"More info" → "Run anyway"**.
+
+            ### What's changed
+            See the commit history for details.
+          files: dist/ToDoList-${{ github.ref_name }}.exe
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
