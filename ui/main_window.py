@@ -142,7 +142,7 @@ class MainWindow(QWidget):
         self.theme_btn.setToolTip("Toggle theme")
         self.theme_btn.clicked.connect(self._toggle_theme)
 
-        hist_btn = QPushButton("📋")
+        hist_btn = QPushButton("☰")
         hist_btn.setObjectName("iconBtn")
         hist_btn.setFixedSize(28, 28)
         hist_btn.setToolTip("Task history")
