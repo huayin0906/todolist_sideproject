@@ -1,14 +1,13 @@
 from PyQt6.QtCore import QPoint, QRect, QSize, Qt, pyqtSlot
-from PyQt6.QtGui import QColor, QCursor, QIcon, QPainter, QPixmap
+from PyQt6.QtGui import QColor, QIcon, QPainter, QPixmap
 from PyQt6.QtWidgets import (
     QApplication, QHBoxLayout, QLabel, QListWidget, QListWidgetItem,
-    QPushButton, QSizePolicy, QSystemTrayIcon, QMenu, QVBoxLayout, QWidget,
+    QPushButton, QSystemTrayIcon, QMenu, QVBoxLayout, QWidget,
 )
 
 from core.models import AppSettings
 from core.task_manager import TaskManager
 from ui.task_item import TaskItemWidget
-from ui.theme import get_stylesheet
 
 
 def _toast(title: str, message: str, tray_fallback=None) -> None:
@@ -33,6 +32,7 @@ def _toast(title: str, message: str, tray_fallback=None) -> None:
                                       QSystemTrayIcon.MessageIcon.Information, 5000)
         except Exception:
             pass
+
 
 _RESIZE = 7          # px margin for resize grab zones
 _MIN_W, _MIN_H = 240, 300
@@ -125,8 +125,8 @@ class MainWindow(QWidget):
         bar.setObjectName("titleBar")
         bar.setFixedHeight(38)
         bar.setMouseTracking(True)
-        bar.mousePressEvent   = self._title_press
-        bar.mouseMoveEvent    = self._title_move
+        bar.mousePressEvent = self._title_press
+        bar.mouseMoveEvent = self._title_move
         bar.mouseReleaseEvent = self._title_release
 
         layout = QHBoxLayout(bar)
@@ -196,9 +196,9 @@ class MainWindow(QWidget):
         item = QListWidgetItem(self.task_list)
         item.setData(Qt.ItemDataRole.UserRole, task.id)
         item.setFlags(
-            Qt.ItemFlag.ItemIsEnabled |
-            Qt.ItemFlag.ItemIsSelectable |
-            Qt.ItemFlag.ItemIsDragEnabled
+            Qt.ItemFlag.ItemIsEnabled
+            | Qt.ItemFlag.ItemIsSelectable
+            | Qt.ItemFlag.ItemIsDragEnabled
         )
         widget = TaskItemWidget(task)
         widget.toggled.connect(self._on_toggle)
@@ -376,21 +376,29 @@ class MainWindow(QWidget):
         bot = y > h - m
         lft = x < m
         rgt = x > w - m
-        if top and lft:  return "nw"
-        if top and rgt:  return "ne"
-        if bot and lft:  return "sw"
-        if bot and rgt:  return "se"
-        if top:          return "n"
-        if bot:          return "s"
-        if lft:          return "w"
-        if rgt:          return "e"
+        if top and lft:
+            return "nw"
+        if top and rgt:
+            return "ne"
+        if bot and lft:
+            return "sw"
+        if bot and rgt:
+            return "se"
+        if top:
+            return "n"
+        if bot:
+            return "s"
+        if lft:
+            return "w"
+        if rgt:
+            return "e"
         return None
 
     _CURSORS = {
-        "n":  Qt.CursorShape.SizeVerCursor,
-        "s":  Qt.CursorShape.SizeVerCursor,
-        "e":  Qt.CursorShape.SizeHorCursor,
-        "w":  Qt.CursorShape.SizeHorCursor,
+        "n": Qt.CursorShape.SizeVerCursor,
+        "s": Qt.CursorShape.SizeVerCursor,
+        "e": Qt.CursorShape.SizeHorCursor,
+        "w": Qt.CursorShape.SizeHorCursor,
         "nw": Qt.CursorShape.SizeFDiagCursor,
         "se": Qt.CursorShape.SizeFDiagCursor,
         "ne": Qt.CursorShape.SizeBDiagCursor,

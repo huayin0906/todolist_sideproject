@@ -4,11 +4,11 @@ from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QCheckBox, QWidget
 from core.models import Task
 
 _SCHED_LABELS = {
-    "none":     "",
-    "daily":    "daily",
+    "none": "",
+    "daily": "daily",
     "interval": "interval",
-    "weekly":   "weekly",
-    "fixed":    "fixed",
+    "weekly": "weekly",
+    "fixed": "fixed",
 }
 
 

@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from PyQt6.QtCore import Qt, QDateTime
+from PyQt6.QtCore import QDateTime
 from PyQt6.QtWidgets import (
     QCheckBox, QComboBox, QDateTimeEdit, QDialog, QDialogButtonBox,
     QFormLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit, QSpinBox,
@@ -10,8 +10,8 @@ from PyQt6.QtWidgets import (
 from core.models import NotificationConfig, ScheduleConfig, Task
 
 _SCHED_TYPES = ["None", "Daily", "Every N days", "Weekly", "Fixed deadline"]
-_SCHED_KEYS  = ["none", "daily", "interval", "weekly", "fixed"]
-_WEEKDAYS    = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+_SCHED_KEYS = ["none", "daily", "interval", "weekly", "fixed"]
+_WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 
 def _key_to_index(key: str) -> int:
