@@ -26,7 +26,21 @@ class Task:
     order: int = 0
     schedule: ScheduleConfig = field(default_factory=ScheduleConfig)
     notification: NotificationConfig = field(default_factory=NotificationConfig)
-    last_reset: str = ""        # ISO-8601 datetime of last auto-reset
+    last_reset: str = ""            # ISO-8601 datetime of last auto-reset
+    # ── cycle history ────────────────────────────────────────────────────────
+    last_cycle_done: bool = None    # True=done, False=missed, None=no history yet
+    late_submitted: bool = False    # user submitted late for the missed cycle
+    late_until: str = ""            # ISO-8601 — late window closes at this time
+
+
+@dataclass
+class HistoryRecord:
+    task_id: str
+    task_title: str
+    reset_at: str               # ISO-8601 datetime of the reset event
+    was_done: bool
+    late_submitted: bool = False
+    late_until: str = ""        # ISO-8601 — empty means no late window
 
 
 @dataclass

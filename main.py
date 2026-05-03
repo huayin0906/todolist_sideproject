@@ -22,9 +22,9 @@ def main():
     app.setQuitOnLastWindowClosed(False)
     app.setApplicationName("To-Do List")
 
-    tasks, settings = load_data()
+    tasks, settings, history = load_data()
 
-    window = MainWindow(tasks, settings)
+    window = MainWindow(tasks, settings, history)
     window.show()
 
     scheduler = Scheduler(window.task_manager, settings)

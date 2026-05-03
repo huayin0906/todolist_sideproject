@@ -140,10 +140,18 @@ class Scheduler(QObject):
             self._check_notification(task, now, offset)
 
     def _check_reset(self, task, now, offset):
-        if _should_reset(task, now, offset):
-            self._tm.reset_task(task.id, now.isoformat())
-            self.reset_triggered.emit(task.id)
-            self._notified.discard(task.id)     # allow re-notification next cycle
+        if not _should_reset(task, now, offset):
+            return
+
+        # Temporarily update last_reset so _next_reset_dt computes the NEXT
+        # window correctly (needed for interval type which uses last_reset).
+        task.last_reset = now.isoformat()
+        next_dt = _next_reset_dt(task, offset)
+        late_until = next_dt.isoformat() if next_dt else ""
+
+        self._tm.reset_and_record(task.id, now.isoformat(), late_until)
+        self.reset_triggered.emit(task.id)
+        self._notified.discard(task.id)
 
     def _check_notification(self, task, now, offset):
         if not task.notification.enabled:

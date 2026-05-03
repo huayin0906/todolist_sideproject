@@ -170,6 +170,102 @@ QCheckBox::indicator:hover {{
     color: #ffffff;
 }}
 
+/* ── history badges ───────────────────────────────────────────── */
+#histBadgeDone {{
+    background-color: {c['success']};
+    color: #ffffff;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 1px 5px;
+}}
+#histBadgeLate {{
+    background-color: #e5a020;
+    color: #ffffff;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 1px 5px;
+}}
+#histBadgeMissed {{
+    background-color: {c['danger']};
+    color: #ffffff;
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 1px 5px;
+    border: none;
+}}
+#histBadgeMissed:hover {{
+    background-color: {c['danger_hover']};
+}}
+#histBadgeExpired {{
+    background-color: {c['text_muted']};
+    color: {c['bg']};
+    border-radius: 3px;
+    font-size: 10px;
+    padding: 1px 5px;
+}}
+
+/* ── history dialog ───────────────────────────────────────────── */
+#histHeader {{
+    background-color: {c['bg2']};
+    border-bottom: 1px solid {c['border']};
+}}
+#histHeader QLabel {{
+    font-weight: bold;
+    color: {c['text_muted']};
+    font-size: 11px;
+}}
+#historyRow {{
+    background-color: {c['bg3']};
+    border-radius: 5px;
+}}
+#histTitle {{
+    color: {c['text']};
+    font-size: 13px;
+}}
+#histTime {{
+    color: {c['text_muted']};
+    font-size: 11px;
+}}
+#histStatusLate {{
+    color: #e5a020;
+    font-size: 11px;
+    font-weight: bold;
+}}
+#histStatusMissed {{
+    background-color: {c['danger']};
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 2px 8px;
+    border: none;
+}}
+#histStatusMissed:hover {{
+    background-color: {c['danger_hover']};
+}}
+#histStatusExpired {{
+    color: {c['text_muted']};
+    font-size: 11px;
+}}
+#histEmpty {{
+    color: {c['text_muted']};
+    font-size: 13px;
+    padding: 20px;
+}}
+#histFooter {{
+    background-color: {c['bg2']};
+    border-top: 1px solid {c['border']};
+}}
+#histCloseBtn {{
+    background-color: {c['bg3']};
+    color: {c['text']};
+    border-radius: 5px;
+    padding: 5px 18px;
+    border: 1px solid {c['border']};
+}}
+#histCloseBtn:hover {{
+    background-color: {c['border']};
+}}
+
 /* ── bottom bar ───────────────────────────────────────────────── */
 #bottomBar {{
     background-color: {c['bg2']};
