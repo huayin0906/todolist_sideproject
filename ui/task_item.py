@@ -94,26 +94,20 @@ class TaskItemWidget(QWidget):
         """Return the appropriate history badge widget for the current task state."""
         task = self.task
 
-        # Only reset-type tasks show history
-        if task.schedule.type in ("none", "fixed") or task.last_cycle_done is None:
+        def _hidden():
             w = QLabel("")
             w.setVisible(False)
             return w
 
-        if task.last_cycle_done:
-            # Completed on time — green tick
-            w = QLabel("✓ last")
-            w.setObjectName("histBadgeDone")
-            return w
+        # No badge: no-schedule/fixed tasks, no history yet, done on time, or late-submitted
+        if (task.schedule.type in ("none", "fixed")
+                or task.last_cycle_done is None
+                or task.last_cycle_done
+                or task.late_submitted):
+            return _hidden()
 
-        if task.late_submitted:
-            # Already submitted late — orange tick
-            w = QLabel("✓ late")
-            w.setObjectName("histBadgeLate")
-            return w
-
+        # Missed and still within the late window — clickable ✗
         if _in_late_window(task):
-            # Missed but still within window — clickable red ✗
             w = QPushButton("✗ late?")
             w.setObjectName("histBadgeMissed")
             w.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -121,7 +115,7 @@ class TaskItemWidget(QWidget):
             w.clicked.connect(lambda: self.late_submit_requested.emit(task.id))
             return w
 
-        # Missed and window closed — grey ✗
+        # Missed and window closed — static grey ✗
         w = QLabel("✗")
         w.setObjectName("histBadgeExpired")
         return w
