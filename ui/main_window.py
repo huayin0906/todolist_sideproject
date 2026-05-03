@@ -273,7 +273,7 @@ class MainWindow(QWidget):
 
     @pyqtSlot(str, bool)
     def _on_toggle(self, task_id: str, completed: bool):
-        self.task_manager.toggle(task_id)
+        self.task_manager.toggle(task_id, completed)
 
     def _on_rows_moved(self, *_):
         new_order = [

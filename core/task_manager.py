@@ -29,10 +29,10 @@ class TaskManager:
         self._renumber()
         self._save()
 
-    def toggle(self, task_id: str) -> None:
+    def toggle(self, task_id: str, completed: bool) -> None:
         for task in self.tasks:
             if task.id == task_id:
-                task.completed = not task.completed
+                task.completed = completed
                 break
         self._save()
 
